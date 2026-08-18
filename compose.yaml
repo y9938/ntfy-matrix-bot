@@ -1,0 +1,43 @@
+services:
+  ntfy-matrix-bot:
+    image: ghcr.io/y9938/ntfy-matrix-bot:latest
+    container_name: ntfy-matrix-bot
+    restart: unless-stopped
+    environment:
+      MATRIX_HOMESERVER_URL:      ${MATRIX_HOMESERVER_URL}
+      MATRIX_BOT_USER_ID:         ${MATRIX_BOT_USER_ID}
+      MATRIX_ALLOWED_USERS:       ${MATRIX_ALLOWED_USERS:-}
+      MATRIX_ALLOWED_HOMESERVERS: ${MATRIX_ALLOWED_HOMESERVERS:-}
+      NTFY_BASE_URL:              ${NTFY_BASE_URL}
+      NTFY_ADMIN_TOKEN_FILE:      /run/secrets/ntfy_token
+      RUST_LOG:                   ${RUST_LOG:-ntfy_matrix_bot=info,matrix_sdk=warn}
+      # AUTHENTICATION (Choose ONE)
+      # MATRIX_BOT_ACCESS_TOKEN_FILE: /run/secrets/matrix_access_token
+      MATRIX_BOT_PASSWORD_FILE: /run/secrets/matrix_password
+    secrets:
+      - ntfy_token
+      # - matrix_access_token
+      - matrix_password
+    volumes:
+      - data:/data
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:size=50M,noexec,nosuid,nodev
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.50"
+
+volumes:
+  data:
+
+secrets:
+  ntfy_token:
+    file: ./secrets/ntfy_token.txt
+  # matrix_access_token:
+  #   file: ./secrets/matrix_access_token.txt
+  matrix_password:
+    file: ./secrets/matrix_password.txt
