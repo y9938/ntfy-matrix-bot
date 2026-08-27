@@ -7,7 +7,7 @@ BUILDER         := "ntfy-matrix-bot-builder"
 # Create the docker-container builder instance
 setup:
     docker buildx inspect {{ BUILDER }} > /dev/null 2>&1 \
-        || docker buildx create --name {{ BUILDER }} --driver docker-container --use --bootstrap
+        || docker buildx create --name {{ BUILDER }} --driver docker-container --bootstrap
 
 # Build image locally for host architecture
 build: setup
