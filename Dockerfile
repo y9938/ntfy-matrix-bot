@@ -64,7 +64,7 @@ RUN --mount=type=bind,source=Cargo.toml,target=Cargo.toml \
     RUST_TARGET="$(cat /rust_target.txt)"; \
     CARGO_PROFILE_RELEASE_LTO=thin \
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS=1 \
-    CARGO_PROFILE_RELEASE_OPT_LEVEL=3 \
+    CARGO_PROFILE_RELEASE_OPT_LEVEL=s \
     cargo zigbuild --release --locked --target "$RUST_TARGET" --bin ntfy-matrix-bot \
  && cp "target/${RUST_TARGET}/release/ntfy-matrix-bot" /ntfy-matrix-bot
 
